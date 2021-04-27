@@ -1,0 +1,25 @@
+name: cdev-tests
+kind: InfraTemplate
+modules:
+  - 
+    name: create-bucket
+    type: terraform
+    source: github.com/shalb/cdev-test-template//s3-bucket/
+    pre_hook:
+      command: echo "check cdev hook"
+      on_destroy: true
+      on_plan: true
+    inputs:
+      name: {{ .name }}
+  - 
+    name: create-s3-object
+    type: terraform
+    source: ./s3-file/
+    inputs:
+      bucket_name: {{ remoteState "this.create-bucket.id" }}
+  - 
+    name: print_outputs
+    type: printer
+    depends_on: this.create-s3-object
+    inputs:
+      bucket_name: Bucket name is {{ remoteState "this.create-bucket.id" }}
