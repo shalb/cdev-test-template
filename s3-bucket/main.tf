@@ -12,3 +12,7 @@ resource "aws_s3_bucket" "cdevautotests" {
 output "id" {
     value = aws_s3_bucket.cdevautotests.id
 }
+
+output "test" {
+    value = "Test output"
+}
