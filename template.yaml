@@ -5,9 +5,9 @@ _p: &provider_aws
 name: cdev-tests
 kind: StackTemplate
 units:
-  - 
+  -
     name: create-bucket
-    type: terraform
+    type: tf-module
     source: github.com/shalb/cdev-test-template//s3-bucket/
     pre_hook:
       command: echo "check cdev hook"
@@ -16,16 +16,17 @@ units:
     providers: *provider_aws
     inputs:
       name: {{ .name }}
-  - 
+  -
     name: create-s3-object
-    type: terraform
+    type: tf-module
     providers: *provider_aws
     source: ./s3-file/
     inputs:
       bucket_name: {{ remoteState "this.create-bucket.id" }}
-  - 
+  -
     name: print_outputs
     type: printer
     depends_on: this.create-s3-object
-    inputs:
+    outputs:
+      TemplatePath: {{ templatePath }}/s3-file/s3file.txt
       bucket_name: Bucket name is {{ remoteState "this.create-bucket.id" }}
