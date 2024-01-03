@@ -24,7 +24,7 @@ units:
     inputs:
       bucket_name: {{ remoteState "this.create-bucket.id" }}
   -
-    name: print_outputs
+    name: outputs
     type: printer
     depends_on: this.create-s3-object
     outputs:
